@@ -19,7 +19,7 @@ const createWindow = () => {
     width: 1320,
     height: 768,
     backgroundColor: '#0F172A',
-    titleBarStyle: 'hidden',
+    //titleBarStyle: 'hidden',
     titleBarOverlay: {
       color: '#0F172A',
       symbolColor: '#FFFFFF',
@@ -30,7 +30,7 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true,
       zoomFactor: 1,
-      devTools: true // Enable dev tools for development
+      //devTools: true // Enable dev tools for development
     },
   });
 
@@ -48,6 +48,12 @@ const createWindow = () => {
   // Setup IPC handlers
   Storage.setupIpcHandlers();
   ProjectService.setupIpcHandlers();
+
+
+
+  mainWindow.webContents.openDevTools()
+
+
 };
 
 // This method will be called when Electron has finished
@@ -69,6 +75,8 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+
+
   }
 });
 

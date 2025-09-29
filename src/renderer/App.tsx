@@ -1,4 +1,3 @@
-import React from 'react';
 import { ProjectsList } from './components/ProjectsList';
 import { Header } from './components/Header';
 import { NotificationContainer } from './components/NotificationContainer';

@@ -33,7 +33,7 @@ class KadiantiApp {
     const modalOverlay = document.getElementById('modalOverlay');
     const modalClose = document.getElementById('modalClose');
     const cancelBtn = document.getElementById('cancelBtn');
-    
+
     modalOverlay?.addEventListener('click', (e) => {
       if (e.target === modalOverlay) this.hideAddProjectModal();
     });
@@ -51,7 +51,7 @@ class KadiantiApp {
     // Project name input validation
     const projectNameInput = document.getElementById('projectName') as HTMLInputElement;
     const projectPathInput = document.getElementById('projectPath') as HTMLInputElement;
-    
+
     const validateForm = () => {
       const saveBtn = document.getElementById('saveProjectBtn') as HTMLButtonElement;
       const isValid = projectNameInput.value.trim() && projectPathInput.value.trim();
@@ -121,13 +121,13 @@ class KadiantiApp {
     const modal = document.getElementById('modalOverlay');
     if (modal) {
       modal.style.display = 'flex';
-      
+
       // Clear form
       const projectNameInput = document.getElementById('projectName') as HTMLInputElement;
       const projectPathInput = document.getElementById('projectPath') as HTMLInputElement;
       const projectInfo = document.getElementById('projectInfo');
       const saveBtn = document.getElementById('saveProjectBtn') as HTMLButtonElement;
-      
+
       if (projectNameInput) projectNameInput.value = '';
       if (projectPathInput) projectPathInput.value = '';
       if (projectInfo) projectInfo.style.display = 'none';
@@ -145,23 +145,23 @@ class KadiantiApp {
   private async selectProjectPath() {
     try {
       const selectedPath = await window.electronAPI.selectDirectory();
-      
+
       if (selectedPath) {
         const projectPathInput = document.getElementById('projectPath') as HTMLInputElement;
         const projectInfo = document.getElementById('projectInfo');
         const projectNameInput = document.getElementById('projectName') as HTMLInputElement;
-        
+
         if (projectPathInput) {
           projectPathInput.value = selectedPath;
         }
 
         // Check if it's a valid Adianti project
         const isValid = await window.electronAPI.checkAdiantiProject(selectedPath);
-        
+
         if (projectInfo) {
           if (isValid) {
             projectInfo.style.display = 'block';
-            
+
             // Auto-fill project name if empty
             if (projectNameInput && !projectNameInput.value.trim()) {
               const pathParts = selectedPath.split(/[/\\]/);
@@ -188,7 +188,7 @@ class KadiantiApp {
     try {
       const projectNameInput = document.getElementById('projectName') as HTMLInputElement;
       const projectPathInput = document.getElementById('projectPath') as HTMLInputElement;
-      
+
       const name = projectNameInput.value.trim();
       const path = projectPathInput.value.trim();
 
@@ -205,11 +205,11 @@ class KadiantiApp {
       }
 
       const project = await window.electronAPI.saveProject({ name, path });
-      
+
       this.projects.push(project);
       this.renderProjects();
       this.hideAddProjectModal();
-      
+
       this.showSuccess('Projeto adicionado com sucesso!');
     } catch (error) {
       console.error('Error saving project:', error);
@@ -224,7 +224,7 @@ class KadiantiApp {
 
     try {
       const success = await window.electronAPI.removeProject(projectId);
-      
+
       if (success) {
         this.projects = this.projects.filter(p => p.id !== projectId);
         this.renderProjects();
@@ -246,10 +246,10 @@ class KadiantiApp {
       // TODO: Navigate to project workspace
       this.currentProject = project;
       console.log('Opening project:', project);
-      
+
       // For now, just show a message
       this.showSuccess(`Projeto "${project.name}" será aberto em breve!`);
-      
+
       // Here we would implement navigation to the project workspace
     } catch (error) {
       console.error('Error opening project:', error);

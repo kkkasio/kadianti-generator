@@ -12,7 +12,11 @@
     "baseUrl": ".",
     "outDir": "dist",
     "resolveJsonModule": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "strict": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -30,8 +34,14 @@
     "isolatedModules": true,
     "noEmit": true
   },
+  "paths": {
+    "@/*": [
+      "src/*"
+    ]
+  },
   "include": [
-    "src/**/*"
+    "src",
+    "vite.*.config.ts",
   ],
   "exclude": [
     "node_modules",

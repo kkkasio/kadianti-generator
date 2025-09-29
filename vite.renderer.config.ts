@@ -1,21 +1,23 @@
-const { defineConfig } = require('vite');
+import { defineConfig } from 'vite'
+import path from "path";
 
-// https://vitejs.dev/config
-module.exports = defineConfig(async () => {
-  const react = await import('@vitejs/plugin-react');
-  const tailwindcss = await import('@tailwindcss/vite');
+export default defineConfig({
+  root: '.',
+  base: './',
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, 'src')
+    }
+  },
 
-  return {
-    plugins: [react.default(), tailwindcss.default()],
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            'react-vendor': ['react', 'react-dom'],
-            'state-vendor': ['zustand'],
-          },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'state-vendor': ['zustand'],
         },
       },
     },
-  };
-});
+  }
+})
