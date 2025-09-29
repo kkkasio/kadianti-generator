@@ -2,12 +2,96 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
-
+    <title>Kadianti - Gerador de Códigos Adianti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div id="app">
+      <div class="container">
+        <header class="header">
+          <div class="header-content">
+            <div class="logo">
+              <i class="fas fa-code"></i>
+              <h1>Kadianti</h1>
+            </div>
+            <p class="subtitle">Gerador de Códigos para Projetos Adianti Framework</p>
+          </div>
+        </header>
+
+        <main class="main">
+          <div class="projects-section">
+            <div class="section-header">
+              <h2>Meus Projetos</h2>
+              <button class="btn btn-primary" id="addProjectBtn">
+                <i class="fas fa-plus"></i>
+                Adicionar Projeto
+              </button>
+            </div>
+
+            <div class="projects-grid" id="projectsGrid">
+              <!-- Projects will be loaded here -->
+            </div>
+
+            <div class="empty-state" id="emptyState">
+              <div class="empty-content">
+                <i class="fas fa-folder-open"></i>
+                <h3>Nenhum projeto adicionado</h3>
+                <p>Adicione seu primeiro projeto Adianti para começar a gerar códigos automaticamente</p>
+                <button class="btn btn-primary" onclick="document.getElementById('addProjectBtn').click()">
+                  <i class="fas fa-plus"></i>
+                  Adicionar Primeiro Projeto
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- Modal para adicionar projeto -->
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Adicionar Projeto Adianti</h3>
+            <button class="modal-close" id="modalClose">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="projectName">Nome do Projeto</label>
+              <input type="text" id="projectName" placeholder="Digite o nome do projeto">
+            </div>
+            <div class="form-group">
+              <label for="projectPath">Caminho do Projeto</label>
+              <div class="path-input-group">
+                <input type="text" id="projectPath" placeholder="Selecione a pasta do projeto" readonly>
+                <button type="button" class="btn btn-secondary" id="selectPathBtn">
+                  <i class="fas fa-folder"></i>
+                  Procurar
+                </button>
+              </div>
+            </div>
+            <div class="project-info" id="projectInfo" style="display: none;">
+              <div class="info-item">
+                <i class="fas fa-check-circle text-success"></i>
+                <span>Projeto Adianti detectado</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+            <button class="btn btn-primary" id="saveProjectBtn" disabled>
+              <i class="fas fa-save"></i>
+              Salvar Projeto
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/renderer.ts"></script>
   </body>
 </html>

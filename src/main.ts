@@ -2,6 +2,11 @@ import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import Storage from './main/services/Storage';
+import { ProjectService } from './main/services/ProjectService';
+
+// Declare Vite global variables
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
+declare const MAIN_WINDOW_VITE_NAME: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -25,7 +30,7 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true,
       zoomFactor: 1,
-      devTools: false
+      devTools: true // Enable dev tools for development
     },
   });
 
@@ -38,9 +43,11 @@ const createWindow = () => {
     );
   }
 
-  Storage.setWindow(mainWindow)
+  Storage.setWindow(mainWindow);
 
-
+  // Setup IPC handlers
+  Storage.setupIpcHandlers();
+  ProjectService.setupIpcHandlers();
 };
 
 // This method will be called when Electron has finished
