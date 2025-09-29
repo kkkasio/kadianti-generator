@@ -48,9 +48,6 @@ const createWindow = () => {
   // Setup IPC handlers
   Storage.setupIpcHandlers();
   ProjectService.setupIpcHandlers();
-
-
-
   mainWindow.webContents.openDevTools()
 
 

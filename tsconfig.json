@@ -1,51 +1,34 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ESNext",
+    "module": "ESNext",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "resolveJsonModule": true,
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
+    "moduleResolution": "Bundler",
+    "types": [
+      "vite/client",
+      "node"
     ],
-    "strict": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "exactOptionalPropertyTypes": false,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitUseStrict": false,
-    "noPropertyAccessFromIndexSignature": false,
-    "noUncheckedIndexedAccess": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "resolveJsonModule": true,
     "jsx": "react-jsx",
-    "declaration": true,
-    "declarationMap": true,
-    "isolatedModules": true,
-    "noEmit": true
-  },
-  "paths": {
-    "@/*": [
-      "src/*"
-    ]
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
   "include": [
     "src",
     "vite.*.config.ts",
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".vite"
+    "forge.config.ts"
   ]
 }

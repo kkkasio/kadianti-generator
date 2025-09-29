@@ -1,9 +1,11 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+
+export default {
+  darkMode: "class",
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/renderer/**/*.{ts,tsx}",
   ],
+  prefix: "ks-",
   theme: {
     extend: {
       colors: {
@@ -36,31 +38,37 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
-      },
-      animation: {
-        'slide-in': 'slideIn 0.3s ease-out',
-        'fade-in': 'fadeIn 0.2s ease-out',
-        'scale-in': 'scaleIn 0.2s ease-out',
-      },
-      keyframes: {
-        slideIn: {
-          '0%': { transform: 'translateX(100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-      },
-      backdropBlur: {
-        xs: '2px',
       }
     },
-  },
-  plugins: [],
-  darkMode: 'class',
-};
+    animation: {
+      'slide-in': 'slideIn 0.3s ease-out',
+      'fade-in': 'fadeIn 0.2s ease-out',
+      'scale-in': 'scaleIn 0.2s ease-out',
+    },
+    keyframes: {
+      slideIn: {
+        '0%': { transform: 'translateX(100%)', opacity: '0' },
+        '100%': { transform: 'translateX(0)', opacity: '1' },
+      },
+      fadeIn: {
+        '0%': { opacity: '0' },
+        '100%': { opacity: '1' },
+      },
+      scaleIn: {
+        '0%': { transform: 'scale(0.95)', opacity: '0' },
+        '100%': { transform: 'scale(1)', opacity: '1' },
+      },
+    },
+    backdropBlur: {
+      xs: '2px',
+    },
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      }
+    }
+
+  }
+} satisfies Config;
