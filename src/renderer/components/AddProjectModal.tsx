@@ -1,25 +1,5 @@
-import { useState } from 'react';
 import { X, Folder, CheckCircle, AlertCircle } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-import { useNotificationStore } from '../stores/useNotificationStore';
-import { extractFolderName } from '../utils';
-import Main from '../services/Main';
-import logger from '@/lib/logger';
-
-// Schema de validação Zod
-const projectSchema = z.object({
-  name: z.string()
-    .min(1, 'Nome do projeto é obrigatório')
-    .min(2, 'Nome deve ter pelo menos 2 caracteres')
-    .max(50, 'Nome deve ter no máximo 50 caracteres'),
-  path: z.string()
-    .min(1, 'Caminho do projeto é obrigatório')
-});
-
-type ProjectFormData = z.infer<typeof projectSchema>;
+import { useAddProjectModal } from '../hooks/useAddProjectModal';
 
 interface AddProjectModalProps {
   isOpen: boolean;
@@ -27,98 +7,21 @@ interface AddProjectModalProps {
 }
 
 export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
-  const [isValidProject, setIsValidProject] = useState(false);
-  const [isValidating, setIsValidating] = useState(false);
-
-  const isLoading = false;
-
-  const { addNotification } = useNotificationStore();
+  const {
+    form,
+    isValidProject,
+    isValidating,
+    isLoading,
+    handleSelectPath,
+    onSubmit,
+    handleClose,
+  } = useAddProjectModal({ onClose });
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
-    setValue,
-    watch,
-    reset,
-  } = useForm<ProjectFormData>({
-    resolver: zodResolver(projectSchema),
-    mode: 'onChange',
-    defaultValues: {
-      name: '',
-      path: '',
-    },
-  });
-
-  logger.debug('isValid:', isValid)
-
-  const watchedPath = watch('path');
-  const watchedName = watch('name');
-
-  const handleSelectPath = async () => {
-    try {
-      const selectedPath = await Main.API.openFolderDialog();
-
-      if (!selectedPath) return;
-
-      if (selectedPath) {
-        setIsValidating(true);
-        setValue('path', selectedPath);
-
-        if (!watchedName.trim()) {
-          const folderName = extractFolderName(selectedPath);
-          setValue('name', folderName);
-        }
-
-        setIsValidProject(true);
-
-        if (false) {
-          addNotification({
-            type: 'error',
-            title: 'Projeto inválido',
-            message: 'A pasta selecionada não parece ser um projeto Adianti válido',
-          });
-        }
-
-        setIsValidating(false);
-      }
-    } catch (error) {
-      console.error('Error selecting directory:', error);
-      addNotification({
-        type: 'error',
-        title: 'Erro',
-        message: 'Erro ao selecionar diretório',
-      });
-      setIsValidating(false);
-    }
-  };
-
-  const onSubmit = async (data: ProjectFormData) => {
-    logger.info('Submitting project:', data);
-
-    if (!isValidProject) {
-      addNotification({
-        type: 'error',
-        title: 'Projeto inválido',
-        message: 'Selecione um projeto Adianti válido',
-      });
-      return;
-    }
-
-    //const success = await saveProject(data);
-
-    const success = true;
-    if (success) {
-      handleClose();
-    }
-  };
-
-  const handleClose = () => {
-    reset();
-    setIsValidProject(false);
-    setIsValidating(false);
-    onClose();
-  };
+    formState: { errors },
+  } = form;
 
   if (!isOpen) return null;
 
