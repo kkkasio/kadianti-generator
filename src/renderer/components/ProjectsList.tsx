@@ -5,10 +5,13 @@ import { AddProjectModal } from './AddProjectModal';
 import { useProjects } from '../hooks/useProjects';
 
 export function ProjectsList() {
-  const { projects, isLoading, openProject } = useProjects();
+
+  //@ts-ignore
+  const projects: any = [];
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (isLoading) {
+  if (false) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
@@ -52,7 +55,7 @@ export function ProjectsList() {
             <ProjectCard
               key={project.id}
               project={project}
-              onOpen={() => openProject(project.id)}
+              onOpen={() => { }}
             />
           ))}
         </div>

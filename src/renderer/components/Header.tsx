@@ -1,6 +1,14 @@
 import { Code2, Sparkles } from 'lucide-react';
+import Main from '../services/Main';
+
 
 export function Header() {
+
+  const version = async () => {
+    return await Main.API.getAppVersion();
+  }
+
+
   return (
     <header className="bg-dark-900/80 backdrop-blur-lg border-b border-dark-700/50 px-6 py-4 -webkit-app-region-drag">
       <div className="max-w-7xl mx-auto -webkit-app-region-no-drag">
@@ -15,7 +23,7 @@ export function Header() {
                 KAdianti
               </h1>
               <p className="text-sm text-dark-400">
-                Gerador de Códigos Adianti Framework
+                Gerador de Códigos Adianti Framework - Version:
               </p>
             </div>
           </div>

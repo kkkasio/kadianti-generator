@@ -3,6 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import Storage from './main/services/Storage';
 import { ProjectService } from './main/services/ProjectService';
+import { HandleIpcMessages } from './main/IpcMessagesHandler';
 
 // Declare Vite global variables
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
@@ -15,6 +16,7 @@ if (started) {
 
 const createWindow = () => {
   // Create the browser window.
+
   const mainWindow = new BrowserWindow({
     width: 1320,
     height: 768,
@@ -53,10 +55,14 @@ const createWindow = () => {
 
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+
+app.whenReady().then(async () => {
+  HandleIpcMessages()
+
+  await createWindow();
+});
+
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -72,7 +78,6 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
-
 
   }
 });

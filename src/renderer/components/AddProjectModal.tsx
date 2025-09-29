@@ -3,6 +3,7 @@ import { X, Folder, CheckCircle } from 'lucide-react';
 import { useProjects } from '../hooks/useProjects';
 import { useNotificationStore } from '../stores/useNotificationStore';
 import { extractFolderName, isNotEmpty } from '../utils';
+import Main from '../services/Main';
 
 interface AddProjectModalProps {
   isOpen: boolean;
@@ -17,35 +18,37 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
   const [isValidProject, setIsValidProject] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
 
-  const { saveProject, isLoading } = useProjects();
+  const isLoading = false;
+
   const { addNotification } = useNotificationStore();
 
   const handleSelectPath = async () => {
     try {
-      const selectedPath = await window.electronAPI.selectDirectory();
-      
+
+      const selectedPath = await Main.API.openFolderDialog();
+
+      if (!selectedPath) return;
+
       if (selectedPath) {
+
         setIsValidating(true);
         setFormData(prev => ({ ...prev, path: selectedPath }));
-        
-        // Check if it's a valid Adianti project
-        const isValid = await window.electronAPI.checkAdiantiProject(selectedPath);
-        setIsValidProject(isValid);
-        
-        if (isValid && !formData.name.trim()) {
+        if (!formData.name.trim()) {
           // Auto-fill project name if empty
           const folderName = extractFolderName(selectedPath);
           setFormData(prev => ({ ...prev, name: folderName }));
+          setIsValidProject(true);
         }
-        
-        if (!isValid) {
+
+
+        if (false) {
           addNotification({
             type: 'error',
             title: 'Projeto inválido',
             message: 'A pasta selecionada não parece ser um projeto Adianti válido',
           });
         }
-        
+
         setIsValidating(false);
       }
     } catch (error) {
@@ -61,7 +64,7 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!isNotEmpty(formData.name) || !isNotEmpty(formData.path)) {
       addNotification({
         type: 'error',
@@ -80,7 +83,9 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
       return;
     }
 
-    const success = await saveProject(formData);
+    //const success = await saveProject(formData);
+
+    const success = true;
     if (success) {
       handleClose();
     }
