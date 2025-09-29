@@ -3,6 +3,7 @@ import { AdiantiProject } from "../../types";
 import * as fs from 'fs';
 import * as path from 'path';
 import { app } from 'electron';
+import logger from "../../lib/logger";
 
 export default class Storage {
 
@@ -28,11 +29,10 @@ export default class Storage {
       if (!fs.existsSync(Storage.projectsFilePath)) {
         return [];
       }
-      
       const data = fs.readFileSync(Storage.projectsFilePath, 'utf-8');
       return JSON.parse(data);
     } catch (error) {
-      console.error('Error reading projects:', error);
+      logger.error('Error reading projects:', error);
       return [];
     }
   }
@@ -40,7 +40,7 @@ export default class Storage {
   static async saveProject(projectData: Omit<AdiantiProject, 'id' | 'createdAt'>): Promise<AdiantiProject> {
     try {
       const projects = await Storage.getProjects();
-      
+
       const newProject: AdiantiProject = {
         ...projectData,
         id: Date.now().toString(),
@@ -48,18 +48,18 @@ export default class Storage {
       };
 
       projects.push(newProject);
-      
+
       // Ensure directory exists
       const dir = path.dirname(Storage.projectsFilePath);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
-      
+
       fs.writeFileSync(Storage.projectsFilePath, JSON.stringify(projects, null, 2));
-      
+
       return newProject;
     } catch (error) {
-      console.error('Error saving project:', error);
+      logger.error('Error saving project:', error);
       throw error;
     }
   }
@@ -68,12 +68,12 @@ export default class Storage {
     try {
       const projects = await Storage.getProjects();
       const filteredProjects = projects.filter(p => p.id !== projectId);
-      
+
       fs.writeFileSync(Storage.projectsFilePath, JSON.stringify(filteredProjects, null, 2));
-      
+
       return true;
     } catch (error) {
-      console.error('Error removing project:', error);
+      logger.error('Error removing project:', error);
       return false;
     }
   }
@@ -82,13 +82,13 @@ export default class Storage {
     try {
       const projects = await Storage.getProjects();
       const project = projects.find(p => p.id === projectId);
-      
+
       if (project) {
         project.lastAccessed = new Date().toISOString();
         fs.writeFileSync(Storage.projectsFilePath, JSON.stringify(projects, null, 2));
       }
     } catch (error) {
-      console.error('Error updating project access:', error);
+      logger.error('Error updating project access:', error);
     }
   }
 
