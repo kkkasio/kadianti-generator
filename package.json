@@ -2,16 +2,22 @@
   "name": "kadianti",
   "productName": "kadianti",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Gerador de Códigos para Projetos Adianti Framework",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "dev": "electron-forge start"
   },
-  "keywords": [],
+  "keywords": [
+    "adianti",
+    "php",
+    "code-generator",
+    "electron"
+  ],
   "author": {
     "name": "Kásio Eduardo",
     "email": "kasioeduardo13@gmail.com"
@@ -28,15 +34,32 @@
     "@electron-forge/plugin-vite": "^7.9.0",
     "@electron/fuses": "^1.8.0",
     "@types/electron-squirrel-startup": "^1.0.2",
+    "@types/node": "^20.14.10",
+    "@types/react": "^19.1.15",
+    "@types/react-dom": "^19.1.9",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "autoprefixer": "^10.4.21",
     "electron": "38.2.0",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.32.0",
-    "typescript": "~4.5.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.5.3",
     "vite": "^5.4.20"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "@heroicons/react": "^2.1.4",
+    "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/vite": "^4.1.13",
+    "clsx": "^2.1.1",
+    "electron-squirrel-startup": "^1.0.1",
+    "lucide-react": "^0.544.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zustand": "^5.0.8"
   }
 }
