@@ -25,12 +25,15 @@
   "license": "MIT",
   "dependencies": {
     "@heroicons/react": "^2.1.4",
+    "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/postcss": "^4.1.13",
     "clsx": "^2.1.1",
     "electron-squirrel-startup": "^1.0.1",
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-hook-form": "^7.63.0",
+    "zod": "^4.1.11",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

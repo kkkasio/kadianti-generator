@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
-import { X, Folder, CheckCircle } from 'lucide-react';
-import { useProjects } from '../hooks/useProjects';
+import { useState } from 'react';
+import { X, Folder, CheckCircle, AlertCircle } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
 import { useNotificationStore } from '../stores/useNotificationStore';
-import { extractFolderName, isNotEmpty } from '../utils';
+import { extractFolderName } from '../utils';
 import Main from '../services/Main';
+import logger from '@/lib/logger';
+
+// Schema de validação Zod
+const projectSchema = z.object({
+  name: z.string()
+    .min(1, 'Nome do projeto é obrigatório')
+    .min(2, 'Nome deve ter pelo menos 2 caracteres')
+    .max(50, 'Nome deve ter no máximo 50 caracteres'),
+  path: z.string()
+    .min(1, 'Caminho do projeto é obrigatório')
+});
+
+type ProjectFormData = z.infer<typeof projectSchema>;
 
 interface AddProjectModalProps {
   isOpen: boolean;
@@ -11,10 +27,6 @@ interface AddProjectModalProps {
 }
 
 export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
-  const [formData, setFormData] = useState({
-    name: '',
-    path: '',
-  });
   const [isValidProject, setIsValidProject] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
 
@@ -22,24 +34,43 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
 
   const { addNotification } = useNotificationStore();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    setValue,
+    watch,
+    reset,
+  } = useForm<ProjectFormData>({
+    resolver: zodResolver(projectSchema),
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      path: '',
+    },
+  });
+
+  logger.debug('isValid:', isValid)
+
+  const watchedPath = watch('path');
+  const watchedName = watch('name');
+
   const handleSelectPath = async () => {
     try {
-
       const selectedPath = await Main.API.openFolderDialog();
 
       if (!selectedPath) return;
 
       if (selectedPath) {
-
         setIsValidating(true);
-        setFormData(prev => ({ ...prev, path: selectedPath }));
-        if (!formData.name.trim()) {
-          // Auto-fill project name if empty
+        setValue('path', selectedPath);
+
+        if (!watchedName.trim()) {
           const folderName = extractFolderName(selectedPath);
-          setFormData(prev => ({ ...prev, name: folderName }));
-          setIsValidProject(true);
+          setValue('name', folderName);
         }
 
+        setIsValidProject(true);
 
         if (false) {
           addNotification({
@@ -62,17 +93,8 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!isNotEmpty(formData.name) || !isNotEmpty(formData.path)) {
-      addNotification({
-        type: 'error',
-        title: 'Campos obrigatórios',
-        message: 'Preencha todos os campos obrigatórios',
-      });
-      return;
-    }
+  const onSubmit = async (data: ProjectFormData) => {
+    logger.info('Submitting project:', data);
 
     if (!isValidProject) {
       addNotification({
@@ -83,7 +105,7 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
       return;
     }
 
-    //const success = await saveProject(formData);
+    //const success = await saveProject(data);
 
     const success = true;
     if (success) {
@@ -92,7 +114,7 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
   };
 
   const handleClose = () => {
-    setFormData({ name: '', path: '' });
+    reset();
     setIsValidProject(false);
     setIsValidating(false);
     onClose();
@@ -115,18 +137,24 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-white mb-2">
               Nome do Projeto
             </label>
             <input
               type="text"
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              {...register('name')}
+              className={`w-full px-3 py-2 bg-dark-700 border rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${errors.name ? 'border-red-500' : 'border-dark-600'
+                }`}
               placeholder="Digite o nome do projeto"
             />
+            {errors.name && (
+              <div className="flex items-center gap-2 text-red-400 text-sm mt-1">
+                <AlertCircle className="w-4 h-4" />
+                <span>{errors.name.message}</span>
+              </div>
+            )}
           </div>
 
           <div>
@@ -136,9 +164,10 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
             <div className="flex gap-2">
               <input
                 type="text"
-                value={formData.path}
+                {...register('path')}
                 readOnly
-                className="flex-1 px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className={`flex-1 px-3 py-2 bg-dark-700 border rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${errors.path ? 'border-red-500' : 'border-dark-600'
+                  }`}
                 placeholder="Selecione a pasta do projeto"
               />
               <button
@@ -151,6 +180,12 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
                 Procurar
               </button>
             </div>
+            {errors.path && (
+              <div className="flex items-center gap-2 text-red-400 text-sm mt-1">
+                <AlertCircle className="w-4 h-4" />
+                <span>{errors.path.message}</span>
+              </div>
+            )}
           </div>
 
           {isValidating && (
@@ -177,7 +212,7 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
             </button>
             <button
               type="submit"
-              disabled={isLoading || !isNotEmpty(formData.name) || !isNotEmpty(formData.path) || !isValidProject}
+              disabled={isLoading || !isValidProject}
               className="px-4 py-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 disabled:from-dark-600 disabled:to-dark-600 text-white rounded-lg font-medium transition-all duration-200 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isLoading && (
@@ -187,7 +222,7 @@ export function AddProjectModal({ isOpen, onClose }: AddProjectModalProps) {
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
