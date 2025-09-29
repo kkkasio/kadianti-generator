@@ -45,17 +45,3 @@ export interface CodeGenerationOptions {
   };
 }
 
-// Extend Window interface for TypeScript
-declare global {
-  interface Window {
-    electronAPI: {
-      selectDirectory: () => Promise<string | null>;
-      checkAdiantiProject: (path: string) => Promise<boolean>;
-      getProjects: () => Promise<AdiantiProject[]>;
-      saveProject: (project: Omit<AdiantiProject, 'id' | 'createdAt'>) => Promise<AdiantiProject>;
-      removeProject: (projectId: string) => Promise<boolean>;
-      readModels: (projectPath: string) => Promise<AdiantiModel[]>;
-      generateCode: (options: CodeGenerationOptions) => Promise<string>;
-    };
-  }
-}
