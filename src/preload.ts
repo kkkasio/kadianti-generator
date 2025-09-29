@@ -1,20 +1,21 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
+
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 
+contextBridge.exposeInMainWorld('api', {
 
-contextBridge.exposeInMainWorld('electronAPI', {
-  // File system operations
-  selectDirectory: () => ipcRenderer.invoke('dialog:openDirectory'),
-  checkAdiantiProject: (path: string) => ipcRenderer.invoke('fs:checkAdiantiProject', path),
+  getAppVersion: () => {
+    return ipcRenderer.invoke("get:app:version")
+  },
 
-  // Storage operations
-  getProjects: () => ipcRenderer.invoke('storage:getProjects'),
-  saveProject: (project: any) => ipcRenderer.invoke('storage:saveProject', project),
-  removeProject: (projectId: string) => ipcRenderer.invoke('storage:removeProject', projectId),
+  openFolderDialog: () => {
+    return ipcRenderer.invoke("dialog:folder:open")
+  },
 
-  // Project operations
-  readModels: (projectPath: string) => ipcRenderer.invoke('project:readModels', projectPath),
-  generateCode: (options: any) => ipcRenderer.invoke('project:generateCode', options),
+  onDefaultError: (callback: Callback) => {
+    ipcRenderer.removeAllListeners("error:default")
+    ipcRenderer.on("error:default", (event, error) => callback(error))
+  },
 });
