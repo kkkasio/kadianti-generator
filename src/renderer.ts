@@ -1,4 +1,5 @@
 import './index.css';
+import logger from './lib/logger';
 import { AdiantiProject } from './types';
 
 class KadiantiApp {
@@ -19,7 +20,7 @@ class KadiantiApp {
     try {
       this.projects = await window.electronAPI.getProjects();
     } catch (error) {
-      console.error('Error loading projects:', error);
+      logger.error('Error loading projects:', error);
       this.showError('Erro ao carregar projetos');
     }
   }
@@ -179,7 +180,7 @@ class KadiantiApp {
         projectPathInput.dispatchEvent(event);
       }
     } catch (error) {
-      console.error('Error selecting directory:', error);
+      logger.error('Error selecting directory:', error);
       this.showError('Erro ao selecionar diretório');
     }
   }
@@ -212,7 +213,7 @@ class KadiantiApp {
 
       this.showSuccess('Projeto adicionado com sucesso!');
     } catch (error) {
-      console.error('Error saving project:', error);
+      logger.error('Error saving project:', error);
       this.showError('Erro ao salvar projeto');
     }
   }
@@ -233,7 +234,7 @@ class KadiantiApp {
         this.showError('Erro ao remover projeto');
       }
     } catch (error) {
-      console.error('Error removing project:', error);
+      logger.error('Error removing project:', error);
       this.showError('Erro ao remover projeto');
     }
   }
@@ -245,14 +246,14 @@ class KadiantiApp {
     try {
       // TODO: Navigate to project workspace
       this.currentProject = project;
-      console.log('Opening project:', project);
+      logger.info('Opening project:', project);
 
       // For now, just show a message
       this.showSuccess(`Projeto "${project.name}" será aberto em breve!`);
 
       // Here we would implement navigation to the project workspace
     } catch (error) {
-      console.error('Error opening project:', error);
+      logger.error('Error opening project:', error);
       this.showError('Erro ao abrir projeto');
     }
   }
@@ -298,4 +299,4 @@ declare global {
 const kadiantiApp = new KadiantiApp();
 window.kadiantiApp = kadiantiApp;
 
-console.log('🚀 Kadianti - Gerador de Códigos Adianti iniciado!');
+logger.info('🚀 Kadianti - Gerador de Códigos Adianti iniciado!');

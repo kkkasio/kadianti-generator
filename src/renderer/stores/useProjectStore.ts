@@ -1,6 +1,7 @@
+import logger from '@/lib/logger';
+import { AdiantiProject } from 'src/types';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { AdiantiProject } from '../types';
 
 interface ProjectState {
   projects: AdiantiProject[];
@@ -24,7 +25,7 @@ interface ProjectState {
 
 export const useProjectStore = create<ProjectState>()(
   devtools(
-    (set, get) => ({
+    (set, get): ProjectState => ({
       projects: [],
       currentProject: null,
       isLoading: false,
@@ -54,7 +55,7 @@ export const useProjectStore = create<ProjectState>()(
           const projects = await window.electronAPI.getProjects();
           set({ projects, isLoading: false });
         } catch (error) {
-          console.error('Error loading projects:', error);
+          logger.error('Error loading projects:', error);
           set({
             error: 'Erro ao carregar projetos',
             isLoading: false

@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
 import { App } from './renderer/App';
+import logger from './lib/logger'
 import './index.css';
 
-console.log('🚀 Kadianti - Gerador de Códigos Adianti iniciado!');
+logger.info('🚀 Kadianti - Gerador de Códigos Adianti iniciado!');
 
 const container = document.getElementById('root');
 if (!container) {

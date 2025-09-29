@@ -1,4 +1,3 @@
-import React from 'react';
 import { Code2, Sparkles } from 'lucide-react';
 
 export function Header() {
@@ -12,8 +11,8 @@ export function Header() {
               <Sparkles className="w-4 h-4 text-primary-400 absolute -top-1 -right-1" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">
-                Kadianti
+              <h1 className="text-2xl font-bold text-red-400">
+                KAdianti
               </h1>
               <p className="text-sm text-dark-400">
                 Gerador de Códigos Adianti Framework

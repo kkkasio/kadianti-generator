@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useProjectStore } from '../stores/useProjectStore';
 import { useNotificationStore } from '../stores/useNotificationStore';
+import logger from '@/lib/logger';
 
 export function useProjects() {
   const {
@@ -13,7 +14,7 @@ export function useProjects() {
     deleteProject,
     setCurrentProject,
   } = useProjectStore();
-  
+
   const { addNotification } = useNotificationStore();
 
   // Load projects on mount
@@ -43,6 +44,7 @@ export function useProjects() {
       return true;
     } catch (error) {
       // Error already handled by store and shown via useEffect above
+      logger.error('Error saving project in hook:', error);
       return false;
     }
   };
