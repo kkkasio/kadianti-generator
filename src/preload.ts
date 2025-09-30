@@ -18,4 +18,25 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.removeAllListeners("error:default")
     ipcRenderer.on("error:default", (event, error) => callback(error))
   },
+
+  // Storage methods
+  getProjects: () => {
+    return ipcRenderer.invoke("storage:getProjects")
+  },
+
+  saveProject: (project: any) => {
+    return ipcRenderer.invoke("storage:saveProject", project)
+  },
+
+  removeProject: (projectId: string) => {
+    return ipcRenderer.invoke("storage:removeProject", projectId)
+  },
+
+  getActiveProject: () => {
+    return ipcRenderer.invoke("storage:getActiveProject")
+  },
+
+  setActiveProject: (projectId: string | null) => {
+    return ipcRenderer.invoke("storage:setActiveProject", projectId)
+  },
 });
