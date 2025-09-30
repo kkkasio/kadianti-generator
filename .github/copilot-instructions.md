@@ -66,13 +66,13 @@ const { addNotification } = useNotificationStore();
 
 **Start Development:**
 ```bash
-npm run dev  # or npm start - launches Electron with hot reload
+yarn dev  # or yarn start - launches Electron with hot reload
 ```
 
 **Build & Package:**
 ```bash
-npm run make  # Creates distributable packages
-npm run package  # Package without creating installers
+yarn make  # Creates distributable packages
+yarn package  # Package without creating installers
 ```
 
 **Styling:**

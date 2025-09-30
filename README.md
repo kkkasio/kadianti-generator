@@ -203,8 +203,7 @@ Este projeto está licenciado sob a **MIT License** - veja o arquivo [LICENSE](L
 
 **Kásio Eduardo**
 - 📧 Email: kasioeduardo13@gmail.com
-- 🐙 GitHub: [Seu GitHub]
-- 💼 LinkedIn: [Seu LinkedIn]
+- 💼 LinkedIn: [linkedin.com/in/kasioeduardo](https://linkedin.com/in/kasioeduardo)
 
 ---
 

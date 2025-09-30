@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useNotificationStore } from '../stores/useNotificationStore';
+import { useProjectStore } from '../stores/useProjectStore';
 import { extractFolderName } from '../utils';
 import Main from '../services/Main';
 import { logger } from '../../lib/logger';
@@ -28,9 +29,9 @@ interface UseAddProjectModalProps {
 export function useAddProjectModal({ onClose }: UseAddProjectModalProps) {
   const [isValidProject, setIsValidProject] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const { addNotification } = useNotificationStore();
+  const { addProject, isLoading } = useProjectStore();
 
   const form = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
@@ -73,7 +74,7 @@ export function useAddProjectModal({ onClose }: UseAddProjectModalProps) {
         setIsValidating(false);
       }
     } catch (error) {
-      console.error('Error selecting directory:', error);
+
       addNotification({
         type: 'error',
         title: 'Erro',
@@ -85,8 +86,6 @@ export function useAddProjectModal({ onClose }: UseAddProjectModalProps) {
 
   const onSubmit = async (data: ProjectFormData) => {
     try {
-      setIsLoading(true);
-
       const projectPath = PathUtil.normalize(data.path);
       data.path = projectPath;
 
@@ -100,23 +99,29 @@ export function useAddProjectModal({ onClose }: UseAddProjectModalProps) {
         });
         return;
       }
+      const newProject = await addProject(data);
 
-      // TODO: Implementar saveProject
-      // const success = await saveProject(data);
-      const success = true;
-
-      if (success) {
+      if (newProject) {
+        addNotification({
+          type: 'success',
+          title: 'Projeto adicionado',
+          message: `Projeto "${newProject.name}" foi adicionado com sucesso`,
+        });
         handleClose();
+      } else {
+        addNotification({
+          type: 'error',
+          title: 'Erro',
+          message: 'Erro ao salvar projeto',
+        });
       }
     } catch (error) {
-      console.error('Error submitting project:', error);
+
       addNotification({
         type: 'error',
         title: 'Erro',
         message: 'Erro ao salvar projeto',
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -124,7 +129,6 @@ export function useAddProjectModal({ onClose }: UseAddProjectModalProps) {
     form.reset();
     setIsValidProject(false);
     setIsValidating(false);
-    setIsLoading(false);
     onClose();
   };
 
