@@ -28,7 +28,6 @@ export function Header() {
             </div>
           </div>
 
-          {/* Projeto Ativo */}
           <div className="flex items-center gap-2 px-4 py-2 bg-dark-800/50 rounded-lg border border-dark-700/50">
             <FolderOpen className="w-4 h-4 text-primary-500" />
             {activeProject ? (
