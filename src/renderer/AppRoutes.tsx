@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ProjectsList } from './components/ProjectsList';
 import { Sidebar } from './components/Sidebar';
 import { DatabaseManager } from './pages/DatabaseManager';
+import { CodeGenerator } from './pages/CodeGenerator';
 import { Explorer } from './pages/Explorer';
 import { Settings } from './pages/Settings';
 import { useProjectStore } from './stores/useProjectStore';
@@ -21,6 +22,7 @@ function WorkspaceRoutes() {
       <Route path="/workspace" element={<WorkspaceLayout />}>
         <Route index element={<Navigate to="/workspace/database" replace />} />
         <Route path="database" element={<DatabaseManager />} />
+        <Route path="code-generator" element={<CodeGenerator />} />
         <Route path="explorer" element={<Explorer />} />
         <Route path="settings" element={<Settings />} />
       </Route>
