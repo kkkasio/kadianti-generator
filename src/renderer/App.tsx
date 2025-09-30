@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
-import { ProjectsList } from './components/ProjectsList';
+import { BrowserRouter } from 'react-router-dom';
 import { Header } from './components/Header';
 import { NotificationContainer } from './components/NotificationContainer';
+import { AppRoutes } from './AppRoutes';
+import { useProjectStore } from './stores/useProjectStore';
 import Main from './services/Main';
 
-export function App() {
+function AppContent() {
   const [isApiReady, setIsApiReady] = useState(false);
+  const { loadActiveProject } = useProjectStore();
 
   useEffect(() => {
-    // Verificar se a API está disponível
     const checkApiAvailability = async () => {
       try {
         if (Main.API) {
           setIsApiReady(true);
+          await loadActiveProject();
         } else {
           // Aguardar um pouco e tentar novamente
           setTimeout(() => setIsApiReady(true), 2000);
@@ -23,7 +26,7 @@ export function App() {
     };
 
     checkApiAvailability();
-  }, []);
+  }, [loadActiveProject]);
 
   if (!isApiReady) {
     return (
@@ -39,12 +42,16 @@ export function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-900 to-dark-800 text-white">
       <Header />
-      <main className="flex-1 p-6">
-        <div className="max-w-7xl mx-auto">
-          <ProjectsList />
-        </div>
-      </main>
+      <AppRoutes />
       <NotificationContainer />
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }
